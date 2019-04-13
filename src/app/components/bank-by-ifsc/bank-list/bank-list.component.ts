@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, AfterViewInit, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewInit, EventEmitter, Output, ElementRef} from '@angular/core';
 import {MatTableDataSource, MatSort, MatPaginator, MatSelectChange} from '@angular/material';
 import { Subscription } from 'rxjs';
 import { BankBranchesService } from '../../../services/bank-branches.service';
@@ -31,6 +31,7 @@ export class BankListComponent implements OnInit {
     {id: 'Pune', name: 'Pune'}];
   @ViewChild(MatPaginator)paginator: MatPaginator;
   @ViewChild(MatSort)sort: MatSort;
+  @ViewChild('filterfield') filterdata: ElementRef;
   @Output()selectionChange: EventEmitter<MatSelectChange>;
   constructor(private bankBranchesService: BankBranchesService) {}
   ngOnInit() {
@@ -44,7 +45,8 @@ export class BankListComponent implements OnInit {
   }
   getBankData(City) {
     this.showProgress = true;
-    this.bankBranchesService.getBankData(City)
+    this.filterdata.nativeElement.value = '';
+    this.bankBranchesService.getBanksInfo(City)
       .subscribe((branches) => {
         this.showProgress = false;
         this.dataSource = new MatTableDataSource(branches);
