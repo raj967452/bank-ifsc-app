@@ -1,6 +1,5 @@
-import {Component, OnInit, ViewChild, AfterViewInit, EventEmitter, Output, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild, EventEmitter, Output, ElementRef} from '@angular/core';
 import {MatTableDataSource, MatSort, MatPaginator, MatSelectChange} from '@angular/material';
-import { Subscription } from 'rxjs';
 import { BankBranchesService } from '../../../services/bank-branches.service';
 
 import {Bankbranch} from '../../../_interface/bankbranch';
@@ -17,7 +16,7 @@ export class BankListComponent implements OnInit {
     'bankName'
   ];
   public selectedCity = 'Jaipur';
-  public dataSource: MatTableDataSource < Bankbranch[] > ;
+  public dataSource: MatTableDataSource < Bankbranch > ;
   public showProgress = false;
   public CITIES = [
     {id: 'Mumbai', name: 'Mumbai'},
@@ -43,10 +42,10 @@ export class BankListComponent implements OnInit {
   onSelectCity(selectionChange) {
     this.getBankData(selectionChange.toUpperCase());
   }
-  getBankData(City) {
+  getBankData(selectCity) {
     this.showProgress = true;
     this.filterdata.nativeElement.value = '';
-    this.bankBranchesService.getBanksInfo(City)
+    this.bankBranchesService.getBanksInfo(selectCity)
       .subscribe((branches) => {
         this.showProgress = false;
         this.dataSource = new MatTableDataSource(branches);
